@@ -60,12 +60,51 @@ P_i는 순열의 i번째 수를 말합니다.
 # -*- coding: utf-8 -*-
 import sys
 input = sys.stdin.readline
-from math import factorial
 M = 1000000007
 
 if __name__ == "__main__":
     N = int(input())
-    print((factorial(N) - 2**(N-1))%M)
+    answer = 0
+
+#################################################################
+
+# # 역시 permutations를 사용하면 무조건 3~7 tiemout 뜨는듯?
+# from itertools import permutations
+# M = 1000000007
+
+# def is_cycle_P(p, v, visit, P):
+#     visit[v] = True
+    
+#     big_j = -1
+#     for j in range(v):
+#         if (j != p) and (P[j] > P[v]): big_j = max(big_j, j)
+#     if big_j != -1:
+#         if visit[big_j] == True: return True
+#         if is_cycle_P(v, big_j, visit, P): return True
+    
+#     small_j = float('inf')
+#     for j in range(v+1, N):
+#         if (j != p) and (P[j] > P[v]): small_j = min(small_j, j)
+#     if small_j != float('inf'):
+#         if visit[small_j] == True: return True
+#         if is_cycle_P(v, small_j, visit, P): return True
+        
+#     return False
+
+# if __name__ == "__main__":
+#     N = int(input())
+#     answer = 0
+    
+#     for P in permutations(range(N)):
+#         chk = False
+#         for i in range(N):
+#             visited = [False] * N
+#             if is_cycle_P(-1, i, visited, P):
+#                 chk = True
+#                 break
+#         if chk: answer += 1
+    
+#     print(answer)
 
 #################################################################
 # from functools import reduce
