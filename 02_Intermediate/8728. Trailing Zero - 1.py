@@ -35,3 +35,87 @@ p-진법 체계에서 n!의 Trailing Zero는 몇 개인지 알아내는 프로�
 출력값 설명
 첫 번째 줄에 p-진법에서 n!의 Trailing Zero의 개수를 출력합니다.
 '''
+
+# 재귀식
+# def factorial(num):
+#     if num == 1:
+#         return 1
+#     if num == 2:
+#         return 2
+#     fac = factorial(num-1) * num
+#     return fac
+
+
+# 1st - try
+'''
+# -*- coding: utf-8 -*-
+import sys
+
+input = sys.stdin.readline
+
+
+# 반복문
+def factorial(num):
+    n = 1
+    for i in range(2, num+1):
+        n = i * n
+    return n
+
+
+def to_base_p(num, p):
+    result = []
+    while num > 0:
+        remainder = num % p
+        result.append(remainder)
+        num //= p
+
+    n = ''
+    for i in result[::-1]:
+        n += str(i)
+    return n  # 역순으로 변환된 문자를 반환
+
+
+def trailing_z(p, num):
+    n = to_base_p(factorial(num), p)
+
+    cnt = 0
+    for i in n[::-1]:  # 맨 뒤부터 0 개수 체크
+        if i == '0':
+            cnt += 1
+        else:
+            break
+
+    return cnt
+
+print(trailing_z(2, 1000))
+
+# p, num = map(int, input().split())
+'''
+
+
+# 2nd - try
+# -*- coding: utf-8 -*-
+import sys
+
+input = sys.stdin.readline
+
+def factorial(num):
+    n = 1
+    for i in range(2, num+1):
+        n = i * n
+    return n
+
+def trailing_zeros_in_factorial(p, n):
+    factorial_value = factorial(n)
+    trailing_zeros_count = 0
+    
+    while factorial_value % p == 0:
+        trailing_zeros_count += 1
+        factorial_value //= p
+    
+    return trailing_zeros_count
+
+# 입력 받기
+p, n = map(int, input().split())
+# 결과 출력
+print(trailing_zeros_in_factorial(p, n))
