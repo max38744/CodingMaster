@@ -66,7 +66,7 @@ n = int(input())
 print(min_trailing_zeros_in_factorial(n))
 '''
 
-
+'''
 # 2nd try
 # -*- coding: utf-8 -*-
 import sys
@@ -101,25 +101,25 @@ def min_zeros(n):
 n = int(input())
 # 결과 출력
 print(min_zeros(n))
-
 '''
+
 # 3rd try
 # -*- coding: utf-8 -*-
-import sys
 
 input = sys.stdin.readline
 
+
 def min_zeros(n):
-    
-    i=5
+
+    i = 5
     while True:
-        if (i // 5 + i // 25 + i // 125 + i//625) >= n:
-            print((i // 5 + i // 25 + i // 125 + i//625))
+        if (i // 5 + i // 25 + i // 125 + i//625 + i // 3125) >= n:
+
             return i
         i += 5
 
-# 입력 받기 
+
+# 입력 받기
 n = int(input())
 # 결과 출력
 print(min_zeros(n))
-'''
