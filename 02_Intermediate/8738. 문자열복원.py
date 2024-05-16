@@ -91,3 +91,36 @@ for key in list(alphabet.keys()):
     words = words.replace(str(key), alphabet[key])
     
 print(words)
+
+
+
+
+
+
+#written by yong
+'''
+# -*- coding: utf-8 -*-
+import sys
+
+def encoding(a):
+    
+    a = str(a)
+    
+    answer = ''
+    i = len(a)-1
+
+    while i >= 0:
+        if a[i] == '0':
+            answer += chr(64+int(a[i-2:i]))
+            i -= 3
+        else:
+            answer += chr(64+int(a[i]))
+            i -= 1
+    
+    answer = answer[::-1].lower()
+    return answer
+            
+a = int(sys.stdin.readline())
+
+print(encoding(a))
+'''
