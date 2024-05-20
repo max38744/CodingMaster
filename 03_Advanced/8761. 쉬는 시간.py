@@ -327,31 +327,26 @@ class Program {
     }
 }
 '''
-
+# -*- coding: utf-8 -*-
 import sys
-import math
 
 input = sys.stdin.readline
 MOD = 998244353
 
-def combination(n, r):
-    if r > n or r < 0:
-        return 0
-    return math.factorial(n) // (math.factorial(r) * math.factorial(n-r))
-
-def rest_time(N, memo):
+def rest_time(N):
     if N == 0: return 1
     if N == 1: return 0
     if N == 2: return 1
-    if memo[N] != -1:
-        return memo[N]
+    
+    dp = [0] * (N+1)
+    dp[0] = 1
+    dp[1] = 0
+    dp[2] = 1
+    
+    for i in range(3,N+1):
+        dp[i] = (i-1)*(dp[i-1]+dp[i-2])
 
-    total = math.factorial(N)
-    for i in range(N):
-        total -= combination(N, i) * rest_time(i, memo)
-    memo[N] = total
-    return total % MOD
+    return dp[N] % MOD
 
 N = int(input())
-memo = [-1] * (N + 1)
-print(rest_time(N, memo))
+print(rest_time(N))
