@@ -62,10 +62,47 @@ import sys
 input = sys.stdin.readline
 M = 1000000007
 
+def mod_fact(n, mod):
+    result = 1
+    for i in range(2, n+1):
+        result = (result * i) % mod
+    return result
+
+def mod_exp(base, exp, mod):
+    result = 1
+    while exp > 0:
+        if exp % 2 == 1:
+            result = (result * base) % mod
+        base = (base * base) % mod
+        exp //= 2
+    return result
+
 if __name__ == "__main__":
     N = int(input())
-    answer = 0
-    # 모르겠다 sync 용으로 한번 수정해봅니다.
+    if N == 1:
+        print(0)
+    else:
+        fact_n = mod_fact(N, M)
+        power_of_two = mod_exp(2, N-1, M)
+        result = (fact_n - power_of_two) % M
+        print(result)
+
+#################################################################
+    
+# import sys
+# input = sys.stdin.readline
+# M = 1000000007 # 10**9 + 7
+
+# def fact(n):
+#     r = 2
+#     for i in range(3, n+1):
+#         r *= i
+#         if r > M: r -= M
+#     return r
+
+# if __name__ == "__main__":
+#     N = int(input())
+#     print(fact(N) - ((2**(N-1))%M))
 
 #################################################################
 
