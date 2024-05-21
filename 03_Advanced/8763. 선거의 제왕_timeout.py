@@ -59,7 +59,7 @@ def king(N, support):
     supporter = support[1:]
     
     while True:
-        max_supporter = max(supporter)  #
+        max_supporter = max(supporter)  
         if king > max_supporter:
             break  
         max_index = supporter.index(max_supporter)
