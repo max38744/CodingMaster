@@ -97,4 +97,4 @@ def king(N, support):
 N = int(input())
 support = list(map(int, input().split()))
 print(king(N, support))
-=======================================================timeout''' 
+========================================================timeout''' 
