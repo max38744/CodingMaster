@@ -34,11 +34,10 @@
 """
 # -*- coding: utf-8 -*-
 import sys
-sys.setrecursionlimit(10**7)
-import math
+input = sys.stdin.readline
 from collections import deque
-
-def dfs(k, x):
+# git민혁
+def bfs(k, x):
     INF = int(1e9)
     visited = [INF]*100001
     # 모든 visited 선언 후 최대거리로 넣어두기    
@@ -48,7 +47,7 @@ def dfs(k, x):
     # 값 비교하면서 visited가 작을 경우 탐색하는 bfs
     while q:
         now, warp = q.popleft()
-        for  in (now+3, now-1, now*2):
+        for i in (now+3, now-1, now*2):
             if 0<=i<=100000 and visited[i] > warp+1:
                 visited[i] = warp+1
                 q.append([i, warp+1])
@@ -58,3 +57,64 @@ def dfs(k, x):
 if __name__ == "__main__":
     k, x = map(int, input().split())
     print(bfs(k, x))
+
+#######################################################
+    
+# 병준
+# -*- coding: utf-8 -*-
+import sys
+input = sys.stdin.readline
+from collections import deque
+
+def check_warp(K, N):
+    if K >= N:
+        return K-N
+    else:
+        DP = [float('inf')] * (N+5)
+        Q = deque()
+        Q.append((N, 0))
+        while Q:
+            now, cnt = Q.popleft()
+            if now%2 == 1:
+                for n in (now+1, now-3):
+                    if (0<=n<=(N+5)) and DP[n] > cnt+1:
+                        DP[n] = cnt+1
+                        Q.append((n, cnt+1))
+            else:
+                for n in (now//2, now-3):
+                    if (0<=n<=(N+5)) and DP[n] > cnt+1:
+                        DP[n] = cnt+1
+                        Q.append((n, cnt+1))
+            if DP[K] != float('inf'): return DP[K]
+        
+if __name__ == "__main__":
+    K, N = map(int, input().split())
+    
+    print(check_warp(K, N))
+    
+#######################################################
+    
+# # 6, 7 timeout / 근데 그냥 값에다가 넣는거랑 DP 배열 해서 넣는거랑 왜이렇게 시간차 많이나는지 설명점..
+# from collections import deque
+
+# if __name__ == "__main__":
+#     K, N = map(int, input().split())
+#     answer = float('inf')
+    
+#     Q = deque()
+#     Q.append((N, 0))
+#     while Q:
+#         N, cnt = Q.popleft()
+#         if N == K:
+#             answer = min(answer, cnt)
+#             break
+#         elif N < K:
+#             answer = min(answer, cnt+(K-N))
+#         elif N%2 == 1:
+#             Q.append((N+1, cnt+1))
+#             Q.append((N-3, cnt+1))
+#         else:
+#             Q.append((N-3, cnt+1))
+#             Q.append((N//2, cnt+1))
+    
+#     print(answer)
