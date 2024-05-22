@@ -32,44 +32,29 @@
 현민이 재우를 포획하기 위한 최소 워프 횟수를 구합니다.
 
 """
-
 # -*- coding: utf-8 -*-
 import sys
 sys.setrecursionlimit(10**7)
 import math
+from collections import deque
 
-
-def dfs(visited, k, x, cnt): 
-    visited[k] = cnt
-    # print(k)
-    # 종료 조건
-    # 앞섰을 경우 거리만큼 빼서 넣고 종료
-    # 같을 경우 바로 종료료
-    if cnt > visited[x]:
-        return
-    if k == x:
-        if visited[x] > cnt:
-            visited[k] = cnt
-    elif k > x:
-        # print(k-x+cnt)
-        if visited[x] > k-x+cnt:
-            visited[x] = k-x+cnt
-    else: # 작을 경우 미리 값 비교해서 visited보다 작을 경우에 다시 dfs
-        if k*2 < 100001 and visited[k*2] > cnt+1:
-            # print(k*2)
-            dfs(visited, k*2, x, cnt+1)
-        if k > 0 and visited[k-1] > cnt+1:
-            dfs(visited, k-1, x, cnt+1)
-        if k+3 < 100000 and visited[k+3] > cnt+1:
-            dfs(visited, k+3, x, cnt+1)
-
+def dfs(k, x):
+    INF = int(1e9)
+    visited = [INF]*100001
+    # 모든 visited 선언 후 최대거리로 넣어두기    
+    
+    q = deque([(k, 0)]) # 현재 위치, 워프 횟수
+    
+    # 값 비교하면서 visited가 작을 경우 탐색하는 bfs
+    while q:
+        now, warp = q.popleft()
+        for  in (now+3, now-1, now*2):
+            if 0<=i<=100000 and visited[i] > warp+1:
+                visited[i] = warp+1
+                q.append([i, warp+1])
+    
+    return visited[x]
 
 if __name__ == "__main__":
     k, x = map(int, input().split())
-    INF = int(1e9)
-    visited = [INF]*100001
-    # 모든 visited 선언 후 최대거리로 넣어두기
-    # 값 비교하면서 visited가 작을 경우 탐색하는 dfs
-    dfs(visited, k, x, 0)
-    
-    print(visited[x])
+    print(bfs(k, x))
