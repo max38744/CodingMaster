@@ -105,6 +105,7 @@ print(min_zeros(n))
 
 # 3rd try
 # -*- coding: utf-8 -*-
+import sys 
 
 input = sys.stdin.readline
 
