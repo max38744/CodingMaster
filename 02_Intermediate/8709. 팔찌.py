@@ -59,3 +59,25 @@ p1 = input().strip()
 p2 = input().strip()
 
 print(is_same(p1, p2))
+
+# 초급에 있었음
+'''
+# -*- coding: utf-8 -*-
+import sys
+
+bracelet1 = list(input())
+bracelet2 = list(input())
+
+flag = 0
+for i in range(len(bracelet2)):
+    bracelet = bracelet2[i:]+bracelet2[:i]
+    if bracelet1 == bracelet:
+        flag = 1
+        break
+        
+if flag==1:
+    print("YES")
+else:
+    print("NO")
+
+'''

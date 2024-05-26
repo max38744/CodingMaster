@@ -118,3 +118,50 @@ if __name__ == "__main__":
 #             Q.append((N//2, cnt+1))
     
 #     print(answer)
+
+
+# 초급에 있었음
+'''
+
+# -*- coding: utf-8 -*-
+import sys
+sys.setrecursionlimit(10**7)
+import math
+
+
+def dfs(visited, k, x, cnt): 
+    visited[k] = cnt
+    # print(k)
+    # 종료 조건
+    # 앞섰을 경우 거리만큼 빼서 넣고 종료
+    # 같을 경우 바로 종료료
+    if cnt > visited[x]:
+        return
+    if k == x:
+        if visited[x] > cnt:
+            visited[k] = cnt
+    elif k > x:
+        # print(k-x+cnt)
+        if visited[x] > k-x+cnt:
+            visited[x] = k-x+cnt
+    else: # 작을 경우 미리 값 비교해서 visited보다 작을 경우에 다시 dfs
+        if k*2 < 100001 and visited[k*2] > cnt+1:
+            # print(k*2)
+            dfs(visited, k*2, x, cnt+1)
+        if k > 0 and visited[k-1] > cnt+1:
+            dfs(visited, k-1, x, cnt+1)
+        if k+3 < 100000 and visited[k+3] > cnt+1:
+            dfs(visited, k+3, x, cnt+1)
+
+
+if __name__ == "__main__":
+    k, x = map(int, input().split())
+    INF = int(1e9)
+    visited = [INF]*100001
+    # 모든 visited 선언 후 최대거리로 넣어두기
+    # 값 비교하면서 visited가 작을 경우 탐색하는 dfs
+    dfs(visited, k, x, 0)
+    
+    print(visited[x])
+
+'''
