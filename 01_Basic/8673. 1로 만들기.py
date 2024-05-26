@@ -50,3 +50,39 @@ if __name__ == "__main__":
         Q.append((X-1, cnt+1))
     
     print(answer)
+    
+    
+    
+    
+# 중복 파일 정리
+'''
+import sys
+
+N = int(sys.stdin.readline())
+
+cnt = 0
+while(N != 1):
+    if N % 5 == 1:
+        N = N - 1
+        cnt+= 1
+    elif N % 5 == 2 and N % 3 != 0:
+        N = N - 1
+        cnt += 1
+    elif N % 5 == 0:
+        N = N / 5
+        cnt += 1
+    elif N % 3 == 0:
+        N = N / 3
+        cnt += 1
+    elif N % 2 == 0:
+        N = N /2
+        cnt += 1
+    else:
+        N = N - 1
+        cnt += 1
+
+print(cnt)
+
+
+
+'''

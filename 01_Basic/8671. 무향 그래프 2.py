@@ -69,3 +69,45 @@ if __name__ == "__main__":
         if Edge[i]: print(*Edge[i])
         # 없으면 'no' 출력
         else: print('no')
+        
+        
+        
+# 중복 파일 정리
+'''
+
+import sys
+import numpy as np
+
+def graph(N, data):
+    # 1. 간선이 없을 때
+    if len(data) == 0: 
+        for i in range(N):
+            print('no')
+        return 
+    
+    # 2. 간선이 있을 때
+    answer = ['no'] * N # 기본 값 no
+    
+    data.sort() # 정점번호가 작은 정점부터 수행위하여 sort
+    for start,end in data:
+        if answer[start-1] == 'no':
+            answer[start-1] = []
+        if answer[end-1] == 'no':
+            answer[end-1] = []
+        answer[start-1].append(end)
+        answer[end-1].append(start)
+
+    for i in range(N):
+        if answer[i] != 'no':
+            answer[i].sort()
+            print(*answer[i])
+        else: print(answer[i][:])
+        
+    return 
+
+N, M = map(int,sys.stdin.readline().split())
+data = [list(map(int,sys.stdin.readline().rsplit())) for i in range(M)]
+
+graph(N,data)
+
+'''

@@ -110,3 +110,117 @@ if __name__ == "__main__":
 #         for n in Edges[v]:
 #             if(not visited[n]): Stack.append(n)
 #     print(*answer)
+
+
+
+
+# 중복 파일
+
+# 1-try
+'''
+# -*- coding: utf-8 -*-
+import sys
+import pandas as pd
+
+def DFS(data):
+    print(data)
+    answer = []
+    C = 1
+    
+    if len(data)==0:
+        answer.append(C)
+        return print(answer[0])
+    
+    while(True):
+        answer.append(C)
+        C = data.loc[data['start']==C,'end'].item()
+        print(C)
+
+        if answer.count(C) != 0:
+            break
+
+    return print(answer)
+
+N, M = map(int, sys.stdin.readline().split())
+data = pd.DataFrame([list(map(int,sys.stdin.readline().split())) for i in range(M)], columns=['start','end'])
+    
+DFS(data)
+'''
+
+# 2-try
+'''
+# -*- coding: utf-8 -*-
+import sys
+
+def DFS(data):
+    if len(data) == 0:
+        return print('1')
+    
+    answer = ''
+    C = 1 # 현재 위치한 정점
+    V = [] # 출발 정점의 집합
+    E = [] # 도착 정점의 집합
+    
+    data.sort()
+    for v,e in data:
+        V.append(v) 
+        E.append(e) 
+    
+    while(True): 
+        answer += str(C) + ' '
+        temp = C
+        C = E[V.index(C)]
+        del(E[V.index(temp)])
+        del(V[V.index(temp)])
+        
+        if V.count(C) == 0:
+            answer += str(C)
+            break
+
+    return print(answer)
+
+N, M = map(int, sys.stdin.readline().split())
+data = [list(map(int,sys.stdin.readline().split())) for i in range(M)]
+'''
+DFS(data)
+'''
+
+# 3-try
+# -*- coding: utf-8 -*-
+import sys
+import numpy as np
+
+def DFS(N, data):
+    if len(data) == 0:
+        return print('1')
+    
+    answer = ''
+    C = 1 # 현재 위치한 정점
+    V = []
+    for i in range(N):
+        V.append(False) # 방문한 정점
+    E_s = [] # 출발 정점의 집합
+    E_e = [] # 도착 정점의 집합
+    
+    data.sort() # 정점번호가 작은 정점부터 수행위하여 sort
+    for start,end in data:
+        E_s.append(start) 
+        E_e.append(end) 
+    
+    while(True): 
+        answer += str(C) + ' '
+        V[C-1] = True # 현재 정점을 방문하였다고 표시
+        C = E_e[E_s.index(C)]
+        if V[C-1] == True: # 방문한 정점이면 끝
+            break
+        if E_s.count(C) == 0: # 이어진 간선 없으면 끝
+            answer += str(C)
+            break
+
+    return print(answer)
+
+N, M = map(int, sys.stdin.readline().split())
+data = [list(map(int,sys.stdin.readline().split())) for i in range(M)]
+    
+DFS(N, data)
+'''

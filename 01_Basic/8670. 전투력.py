@@ -48,3 +48,24 @@ if __name__ == "__main__":
         k = min(K[:(i+1)]) * (i+1)
         answer = max(answer, k)
     print(answer)
+    
+# 중복 파일
+
+'''
+import sys
+
+def combet_power(N,data):
+    max_combet = []
+    cnt = 1
+    data.sort(reverse=True)
+    for i in data:
+        max_combet.append(i*cnt)
+        cnt += 1
+    return print(max(max_combet))
+
+input = sys.stdin.readline
+N = int(input())
+data = list(map(int,input().split()))
+
+combet_power(N,data)
+'''
