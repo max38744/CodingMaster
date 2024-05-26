@@ -68,7 +68,8 @@ i번째 정수는 i번 정점의 아름다움을 의미합니다. (1 ≤ w_i ≤
 
 첫 번째 줄에 덩굴나무의 간선을 잘라내어 트리 모양으로 만들었을 때 아름다운 정도의 최댓값을 출력합니다.
 '''
-import sys 
+# -*- coding: utf-8 -*-
+import sys
 
 class UnionFind:
     def __init__(self, n):
@@ -128,3 +129,67 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+'''
+def find(parent, x):
+    if parent[x] != x:
+        parent[x] = find(parent, parent[x])
+    return parent[x]
+
+def union(parent, rank, x, y):
+    rootX = find(parent, x)
+    rootY = find(parent, y)
+    
+    if rootX != rootY:
+        if rank[rootX] > rank[rootY]:
+            parent[rootY] = rootX
+        elif rank[rootX] < rank[rootY]:
+            parent[rootX] = rootY
+        else:
+            parent[rootY] = rootX
+            rank[rootX] += 1
+
+def max_spanning_tree(N, edges):
+    parent = [i for i in range(N)]
+    rank = [0] * N
+    
+    max_beauty = 0
+    edges.sort(reverse=True, key=lambda x: x[0])
+    
+    for weight, u, v in edges:
+        if find(parent, u) != find(parent, v):
+            union(parent, rank, u, v)
+            max_beauty += weight
+    
+    return max_beauty
+
+def main():
+    import sys
+    input = sys.stdin.read
+    data = input().split()
+    
+    index = 0
+    N = int(data[index])
+    M = int(data[index + 1])
+    index += 2
+    
+    beauties = list(map(int, data[index:index + N]))
+    index += N
+    
+    edges = []
+    for _ in range(M):
+        u = int(data[index]) - 1
+        v = int(data[index + 1]) - 1
+        index += 2
+        weight = beauties[u] + beauties[v]
+        edges.append((weight, u, v))
+    
+    print(max_spanning_tree(N, edges))
+
+if __name__ == "__main__":
+    main()
+
+'''
