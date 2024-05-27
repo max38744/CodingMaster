@@ -44,10 +44,6 @@ u_i와 v_i는 경로가 잇는 행성의 번호, w_i는 이 경로에 통신망�
 # -*- coding: utf-8 -*-
 import sys
 input = sys.stdin.readline
-# 3,4,5 Timeout -> 유니온 파인드를 GPT가 작성해줌
-# 유니온 파인드 해결하거나 Edge를 바꾸기
-# merge_sets 역할 : 집합들 중 합칠 수 있는 집합은 합쳐서 반환하기
-import numpy as np
 INF = 10001
 
 class UnionFind:
@@ -94,12 +90,8 @@ def merge_sets(sets):
 
 if __name__ == "__main__":
     N, M, K = map(int, input().split())
-    # 간선 비용 초기화 (자기 자리는 최댓값으로 설정)
-    Edge = np.array([[INF] * N for _ in range(N)])
-    for _ in range(M):
-        u, v, w = map(int, input().split())
-        Edge[u-1][v-1] = w
-        Edge[v-1][u-1] = w
+    Edge = [list(map(int, input().split())) for _ in range(M)]
+    Edge.sort(key=lambda x:x[2])
 
     # 만들어진 통신망 묶음을 저장할 공간
     maked_set = []
@@ -107,43 +99,134 @@ if __name__ == "__main__":
     visited = [False] * N
     
     answer = 0
-    while False in visited:
-        # 일단 최소 비용 가진 경로 찾기
-        k = np.min(Edge)
-        # k 가 신설 가능한 비용 K보다 싸면
-        if k < K:
-            # k 값으로 행성들 합치기
-            us = np.where(Edge == k)[0]
-            vs = np.where(Edge == k)[1]
-
-            # 최소 비용 행성들끼리 묶어주기
-            for u, v in zip(us, vs):
-                chk = False
-                for s in maked_set:
-                    # u나 v가 이미 있는 집합이라면 추가만 해주자
-                    if (u in s) or (v in s):
-                        s.add(v)
-                        s.add(u)
-                        chk = True
-                # 만약 기존 집합에 행성 추가를 못했다면 새로 추가
-                if not chk: maked_set.append(set([u, v]))
-                # 통신망 개설했으니 개설 비용을 추가
-                answer += Edge[u][v]
-                # 방문 체크
-                visited[u] = True
-                visited[v] = True
-                # 개설완료한 부분은 INF 로 바꾸자
-                Edge[u][v] = INF
-
-            # 만들어진 집합들 끼리 합칠 수 있으면 합치기
-            maked_set = merge_sets(maked_set)
-        # k가 신설 비용 K와 같거나 비싸면 일단 탈출
-        else: break
-    # 일단 양방향 간선이니까, answer를 2로 나눠주자
-    answer //= 2
+    for u, v, w in Edge:
+        u, v = u-1, v-1
+        # 가중치가 K 이상이 되면 그냥 끊고 나가기
+        if w >= K: break
+        # 통신망 묶음을 만들자
+        chk = False
+        for s in maked_set:
+            # u나 v가 이미 있는 집합이라면 추가만 해주자
+            if (u in s) or (v in s):
+                s.add(v)
+                s.add(u)
+                chk = True
+        # 만약 기존 집합에 행성 추가를 못했다면 새로 추가
+        if not chk: maked_set.append(set([u, v]))
+        # 통신망 개설했으니 개설 비용을 추가
+        answer += w
+        # 방문 체크
+        visited[u] = True
+        visited[v] = True
+        # 다 방문한거면 나가기
+        if False not in visited: break
+    # 만들어진 집합들 한번 정리
+    maked_set = merge_sets(maked_set)
     # 만들어진 집합 수와, 외딴 행성(False인 행성) 간 신설할 통신망 비용 더하기
     answer += (len(maked_set) + visited.count(False) - 1) * K
     print(answer)
+
+#############################################################################
+# # 3,4,5 Timeout -> 유니온 파인드를 GPT가 작성해줌
+# # 유니온 파인드 해결하거나 Edge를 바꾸기
+# # merge_sets 역할 : 집합들 중 합칠 수 있는 집합은 합쳐서 반환하기
+# import numpy as np
+# INF = 10001
+
+# class UnionFind:
+#     def __init__(self, n):
+#         self.parent = list(range(n))
+#         self.rank = [1] * n
+
+#     def find(self, u):
+#         if self.parent[u] != u:
+#             self.parent[u] = self.find(self.parent[u])
+#         return self.parent[u]
+
+#     def union(self, u, v):
+#         root_u = self.find(u)
+#         root_v = self.find(v)
+#         if root_u != root_v:
+#             if self.rank[root_u] > self.rank[root_v]:
+#                 self.parent[root_v] = root_u
+#             elif self.rank[root_u] < self.rank[root_v]:
+#                 self.parent[root_u] = root_v
+#             else:
+#                 self.parent[root_v] = root_u
+#                 self.rank[root_u] += 1
+
+# def merge_sets(sets):
+#     n = len(sets)
+#     uf = UnionFind(n)
+
+#     # 집합들의 교집합 여부를 확인하여 유니온 연산 수행
+#     for i in range(n):
+#         for j in range(i + 1, n):
+#             if sets[i] & sets[j]:
+#                 uf.union(i, j)
+
+#     # 유니온 파인드 결과를 바탕으로 새로운 집합들 생성
+#     merged_sets = {}
+#     for i in range(n):
+#         root = uf.find(i)
+#         if root not in merged_sets:
+#             merged_sets[root] = set()
+#         merged_sets[root] |= sets[i]
+
+#     return list(merged_sets.values())
+
+# if __name__ == "__main__":
+#     N, M, K = map(int, input().split())
+#     # 간선 비용 초기화 (자기 자리는 최댓값으로 설정)
+#     Edge = np.array([[INF] * N for _ in range(N)])
+#     for _ in range(M):
+#         u, v, w = map(int, input().split())
+#         Edge[u-1][v-1] = w
+#         Edge[v-1][u-1] = w
+
+#     # 만들어진 통신망 묶음을 저장할 공간
+#     maked_set = []
+#     # 통신망 개통된 행성은 True
+#     visited = [False] * N
+    
+#     answer = 0
+#     while False in visited:
+#         # 일단 최소 비용 가진 경로 찾기
+#         k = np.min(Edge)
+#         # k 가 신설 가능한 비용 K보다 싸면
+#         if k < K:
+#             # k 값으로 행성들 합치기
+#             us = np.where(Edge == k)[0]
+#             vs = np.where(Edge == k)[1]
+
+#             # 최소 비용 행성들끼리 묶어주기
+#             for u, v in zip(us, vs):
+#                 chk = False
+#                 for s in maked_set:
+#                     # u나 v가 이미 있는 집합이라면 추가만 해주자
+#                     if (u in s) or (v in s):
+#                         s.add(v)
+#                         s.add(u)
+#                         chk = True
+#                 # 만약 기존 집합에 행성 추가를 못했다면 새로 추가
+#                 if not chk: maked_set.append(set([u, v]))
+#                 # 통신망 개설했으니 개설 비용을 추가
+#                 answer += Edge[u][v]
+#                 # 방문 체크
+#                 visited[u] = True
+#                 visited[v] = True
+#                 # 개설완료한 부분은 INF 로 바꾸자
+#                 Edge[u][v] = INF
+
+#             # 만들어진 집합들 끼리 합칠 수 있으면 합치기
+#             maked_set = merge_sets(maked_set)
+#         # k가 신설 비용 K와 같거나 비싸면 일단 탈출
+#         else: break
+#     # 일단 양방향 간선이니까, answer를 2로 나눠주자
+#     answer //= 2
+#     # 만들어진 집합 수와, 외딴 행성(False인 행성) 간 신설할 통신망 비용 더하기
+#     answer += (len(maked_set) + visited.count(False) - 1) * K
+#     print(answer)
         
 #############################################################################
 
