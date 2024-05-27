@@ -49,6 +49,61 @@
 출력값 설명
 
 선거의 제왕이 당선을 위해 설득해야 하는 다른 후보의 지지자 수의 최솟값을 출력합니다.'''
+
+# -*- coding: utf-8 -*-
+import sys
+input = sys.stdin.readline
+import numpy as np
+
+if __name__ == "__main__":
+    N = int(input())
+    candi = np.array(list(map(int, input().split())))
+    origin = candi[0]
+
+    while True:
+        # 큰 숫자가 있는 배열들의 인덱스 값 
+        first = np.where(candi == max(candi))[0]
+        # 만약 큰 숫자가 있는 배열들의 인덱스 값에 0이 있다면(제왕이가 있다면),
+        if 0 in first:
+            # 제왕이 단독 1등이면 그냥 break
+            if len(first)==1: break
+            # 단독 후보가 아니면, 아무데서나 지원자 1명만 설득하면 제왕이가 이긴다
+            candi[0] += 1
+            break
+        # 2번째로 큰 숫자가 있는 배열의 인덱스 값
+        second = np.where(candi == np.unique(candi)[-2])[0]
+        # 만약 2번째 큰 수에 제왕이가 있다면,
+        if 0 in second:
+            # 바로 계산 시작
+            sub = (candi[first[0]]-candi[0])//(len(first)+1)
+            
+            candi[0] += sub*len(first)
+            candi = np.where(candi == max(candi), candi-sub, candi)
+            # 이러면 이제 차이나는만큼+1 더 설득하면 된다.
+            candi[0] += candi[first[0]]-candi[0] +1
+            break
+        # 가장 많은 지원자들은 일단 전부 설득해서 제왕이에게 넣을것
+        sub = (candi[first[0]]-candi[second[0]])
+        # 근데 그 설득하는 수가 과하게 많다면, 계산해서 필요한만큼만 설득
+        if candi[0]+(sub*len(first)) > candi[second[0]]:
+            sub = (candi[first[0]]-candi[0])//(len(first)+1)
+            
+            if sub == 0:
+                candi[0] += candi[first[0]]-candi[0]
+                break
+            
+            candi[0] += sub*len(first)
+            candi = np.where(candi == max(candi), candi-sub, candi)
+            candi[0] += candi[first[0]]-candi[0] +1
+            break
+        # 아니라면, first의 수를 second의 수에 맞춰주기만 하고 다시 연산 시작
+        else:
+            candi = np.where(candi == max(candi), candi-sub, candi)
+            candi[0] += sub*len(first)
+    # 추가된 후보만큼만 답이다.
+    answer = candi[0]-origin
+    print(answer)
+    
 '''# -*- coding: utf-8 -*-
 import sys
 input = sys.stdin.readline
