@@ -98,3 +98,55 @@ if __name__ == "__main__":
 
 # T = 2
 # N = [14, 7]
+
+###################################################################### timeout 5 6 7 ( dynamic programming ) 
+
+# -*- coding: utf-8 -*-
+import sys
+from collections import deque
+
+input = sys.stdin.readline
+
+def bfs_to_reach_height(N):
+    if N == 1:
+        return 0
+    
+    queue = deque([(1, 1, 0)])  # (current_height, previous_height, days_passed)
+    visited = {(1, 1)}
+    
+    while queue:
+        current_height, previous_height, days_passed = queue.popleft()
+        
+        if current_height == N:
+            return days_passed
+        
+        sunny_height = current_height + previous_height
+        if sunny_height not in visited:
+            visited.add((sunny_height, current_height))
+            queue.append((sunny_height, current_height, days_passed + 1))
+
+        cloudy_height = max(1, current_height - 1)
+        if cloudy_height not in visited:
+            visited.add((cloudy_height, current_height))
+            queue.append((cloudy_height, current_height, days_passed + 1))
+        
+        stormy_height = (previous_height + current_height) // 2
+        if stormy_height not in visited:
+            visited.add((stormy_height, current_height))
+            queue.append((stormy_height, current_height, days_passed + 1))
+    
+    return -1
+
+def main():
+    T = int(input().strip())
+    results = []
+
+    for _ in range(T):
+        N = int(input().strip())
+        results.append(bfs_to_reach_height(N))
+
+    for result in results:
+        print(result)
+
+if __name__ == "__main__":
+    main()
