@@ -38,60 +38,102 @@
 출력값 설명
 두 컨테이너를 주어진 위치로 재배치하는데 필요한 컨테이너 이동 횟수의 최솟값을 출력합니다. 만약 두 컨테이너를 주어진 위치로 재배치시킬 수 없다면 -1을 출력합니다.
 '''
-
+# 6번이 29s 에 돌아감 / 서버 좋을 때 잘 제출할 것 by. 강병준
+import sys
+input = sys.stdin.readline
 from collections import deque
 
-def bfs(start, goal, graph, n):
-    distances = [-1] * (n + 1)
-    distances[start] = 0
-    queue = deque([start])
-    
-    while queue:
-        current = queue.popleft()
-        if current == goal:
-            return distances[current]
-        
-        for neighbor in graph[current]:
-            if distances[neighbor] == -1:
-                distances[neighbor] = distances[current] + 1
-                queue.append(neighbor)
-    
-    return -1
-
-def min_moves_to_relocate_containers(n, m, s1, d1, s2, d2, roads):
-    graph = [[] for _ in range(n + 1)]
-    for u, v in roads:
-        graph[u].append(v)
-        graph[v].append(u)
-    
-    dist1 = bfs(s1, d1, graph, n)
-    dist2 = bfs(s2, d2, graph, n)
-    
-    if dist1 == -1 or dist2 == -1:
-        return -1
-    
-    return dist1 + dist2
-
 if __name__ == "__main__":
-    import sys
-    input = sys.stdin.read
-    data = input().split()
-    
-    N = int(data[0])
-    M = int(data[1])
-    
-    S1 = int(data[2])
-    D1 = int(data[3])
-    S2 = int(data[4])
-    D2 = int(data[5])
-    
-    roads = []
-    index = 6
+    N, M = map(int, input().split())
+    S1, D1, S2, D2 = map(int, input().split())
+    S1, D1, S2, D2 = S1-1, D1-1, S2-1, D2-1
+    Roads = [[False] * N for _ in range(N)]
     for _ in range(M):
-        u = int(data[index])
-        v = int(data[index + 1])
-        roads.append((u, v))
-        index += 2
+        u, v = map(int, input().split())
+        Roads[u-1][v-1] = True
+        Roads[v-1][u-1] = True
     
-    result = min_moves_to_relocate_containers(N, M, S1, D1, S2, D2, roads)
-    print(result)
+    # 방문기록, 2개 체크해야하니까 2차원으로
+    visited = [[False] * N for _ in range(N)]
+
+    answer = -1
+    Q = deque()
+    Q.append((S1, S2, 0))
+    while Q:
+        n1, n2, cnt = Q.popleft()
+        # 전부 목적지 도착이면 탈출
+        if (n1 == D1) & (n2 == D2):
+            answer = cnt
+            break
+        # 방문한 적 있으면 넘김
+        if visited[n1][n2]: continue
+        visited[n1][n2] = True
+
+        # n1이 이동하는 경우
+        for n, b in enumerate(Roads[n1]):
+            # n1이 가려하는 곳은 n2이 없어야 한다.
+            if (n != n2) & b: Q.append((n, n2, cnt+1))
+        # n2가 이동하는 경우
+        for n, b in enumerate(Roads[n2]):
+            # n2가 가려하는 곳은 n1이 없어야 한다.
+            if (n != n1) & b: Q.append((n1, n, cnt+1))
+    print(answer)
+
+#####################################################################################
+# # 5,6,7 Passed by. 오용석
+# from collections import deque
+
+# def bfs(start, goal, graph, n):
+#     distances = [-1] * (n + 1)
+#     distances[start] = 0
+#     queue = deque([start])
+    
+#     while queue:
+#         current = queue.popleft()
+#         if current == goal:
+#             return distances[current]
+        
+#         for neighbor in graph[current]:
+#             if distances[neighbor] == -1:
+#                 distances[neighbor] = distances[current] + 1
+#                 queue.append(neighbor)
+    
+#     return -1
+
+# def min_moves_to_relocate_containers(n, m, s1, d1, s2, d2, roads):
+#     graph = [[] for _ in range(n + 1)]
+#     for u, v in roads:
+#         graph[u].append(v)
+#         graph[v].append(u)
+    
+#     dist1 = bfs(s1, d1, graph, n)
+#     dist2 = bfs(s2, d2, graph, n)
+    
+#     if dist1 == -1 or dist2 == -1:
+#         return -1
+    
+#     return dist1 + dist2
+
+# if __name__ == "__main__":
+#     import sys
+#     input = sys.stdin.read
+#     data = input().split()
+    
+#     N = int(data[0])
+#     M = int(data[1])
+    
+#     S1 = int(data[2])
+#     D1 = int(data[3])
+#     S2 = int(data[4])
+#     D2 = int(data[5])
+    
+#     roads = []
+#     index = 6
+#     for _ in range(M):
+#         u = int(data[index])
+#         v = int(data[index + 1])
+#         roads.append((u, v))
+#         index += 2
+    
+#     result = min_moves_to_relocate_containers(N, M, S1, D1, S2, D2, roads)
+#     print(result)
