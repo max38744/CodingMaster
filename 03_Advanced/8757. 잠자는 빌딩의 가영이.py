@@ -127,7 +127,7 @@ if __name__ == "__main__":
 # # 용석 코드
 # 6번 : "0 0 1/9 2/9 2/9\r\n4/9\r\n"
 # 7번 : "11/48 13/54 107/648 13/162 1/36 1/162 1/1296 0\r\n1/4\r\n"
-# # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # import sys
 # from fractions import Fraction
 
@@ -139,21 +139,21 @@ if __name__ == "__main__":
 # q = Fraction(B,(A+B+C))
 # r = Fraction(C,(A+B+C))
     
-# prob = [Fraction(0,1)] * (N+1)
-# prob[K] = Fraction(1,1)
+# prob = [Fraction(0)] * (N+1)
+# prob[K] = Fraction(1)
 
 # for _ in range(X):
 #     pre_prob = prob.copy()
 #     for i in range(N+1):
 #         if i == 0:
-#             prob[i] = pre_prob[-1]*p + pre_prob[0] + pre_prob[1]*q
+#             prob[i] = pre_prob[i-1]*p + pre_prob[i] + pre_prob[i+1]*q
 #         elif i == 1:
-#             prob[i] = 0*p + pre_prob[i]*r + pre_prob[i+1]*q
+#             prob[i] = pre_prob[i]*r + pre_prob[i+1]*q
 #         elif i == N:
-#             prob[i] = pre_prob[i-1]*p + pre_prob[i]*r + 0*q
+#             prob[i] = pre_prob[i-1]*p + pre_prob[i]*r
 #         else:
 #             prob[i] = pre_prob[i-1]*p + pre_prob[i]*r + pre_prob[i+1]*q
         
-
-# print(*prob[1:])
-# print(prob[0])
+# for i in range(1,N+1):
+#     print(f'{prob[i].numerator}/{prob[i].denominator}', end =' ')
+# print('\n'+f'{prob[0].numerator}/{prob[0].denominator}')
