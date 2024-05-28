@@ -108,12 +108,44 @@ if __name__ == "__main__":
             Q.append((now+i, p, time+1))
             
     # 답은 기약분수로
-    for i in range(1, N):
+    for i in range(1, N+1):
         ans = red_frac(answer[i])
         print(f'{ans[0]}/{ans[1]}', end=' ')
     # 마지막은 줄바꿈 해줘야함
-    ans = red_frac(answer[i+1])
-    print(f'{ans[0]}/{ans[1]}')
     # 잠에서 깰 확률도 써주자
     ans = red_frac(answer[0])
-    print(f'{ans[0]}/{ans[1]}')
+    print('\n'+ f'{ans[0]}/{ans[1]}')
+
+
+# 용석 코드
+# # -*- coding: utf-8 -*-
+# import sys
+# from fractions import Fraction
+
+# input = sys.stdin.readline
+
+# N, K, A, B, C, X = map(int, input().split())
+
+# p = Fraction(A,(A+B+C))
+# q = Fraction(B,(A+B+C))
+# r = Fraction(C,(A+B+C))
+    
+# prob = [Fraction(0,1)] * (N+1)
+# prob[K] = Fraction(1,1)
+
+
+# for _ in range(X):
+#     pre_prob = prob.copy()
+#     for i in range(N+1):
+#         if i == 0:
+#             prob[i] = pre_prob[-1]*p + pre_prob[0] + pre_prob[1]*q
+#         elif i == 1:
+#             prob[i] = 0*p + pre_prob[i]*r + pre_prob[i+1]*q
+#         elif i == N:
+#             prob[i] = pre_prob[i-1]*p + pre_prob[i]*r + 0*q
+#         else:
+#             prob[i] = pre_prob[i-1]*p + pre_prob[i]*r + pre_prob[i+1]*q
+        
+
+# print(*prob[1:])
+# print(prob[0])
