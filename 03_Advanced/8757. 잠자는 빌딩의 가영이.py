@@ -60,9 +60,6 @@ N은 아파트의 높이를 의미하고, K는 가영이가 어느 층에서 시
 # -*- coding: utf-8 -*-
 import sys
 input = sys.stdin.readline
-# 6,7 번 Failed
-# "Traceback (most recent call last):\r\n  File \"/codereet/e6a7d4e0-3ab9-4c31-b3a9-db8b49a992a4.py\", line 60, in <module>\r\n    ans = red_frac(answer[i])\r\n  File \"/codereet/e6a7d4e0-3ab9-4c31-b3a9-db8b49a992a4.py\", line 28, in red_frac\r\n    return [p[0]//k, p[1]//k]\r\nZeroDivisionError: integer division or modulo by zero\r\n"
-# "11/48 13/54 107/648 13/162 1/36 1/162 1/1296 Traceback (most recent call last):\r\n  File \"/codereet/e6a7d4e0-3ab9-4c31-b3a9-db8b49a992a4.py\", line 60, in <module>\r\n    ans = red_frac(answer[i])\r\n  File \"/codereet/e6a7d4e0-3ab9-4c31-b3a9-db8b49a992a4.py\", line 28, in red_frac\r\n    return [p[0]//k, p[1]//k]\r\nZeroDivisionError: integer division or modulo by zero\r\n"
 from collections import deque
 import math
 
@@ -73,7 +70,7 @@ def lcm(a, b):
 # 배열 형태의 분수 덧셈
 def prob_sum(aP, bP):
     # aP 가 [0, 0] 이라면? 그냥 bP 그대로 보내기
-    if aP == [0, 0]: return bP
+    if aP == [0, 1]: return bP
     # 분모가 같다면 분자만 더해주기
     if aP[1] == bP[1]:
         return [aP[0]+bP[0], aP[1]]
@@ -85,6 +82,7 @@ def prob_sum(aP, bP):
 
 # 배열 형태의 분수 약분
 def red_frac(p):
+    if p[0]==0: return p
     k = math.gcd(p[0], p[1])
     return [p[0]//k, p[1]//k]
 
@@ -93,7 +91,7 @@ if __name__ == "__main__":
     N, K, A, B, C, X = map(int, input().split())
     
     # 인덱스 0은 잠에서 깰 확률, 1~N까지는 해당 층에 있을 확률
-    answer = [[0, 0] for _ in range(N+1)]
+    answer = [[0, 1] for _ in range(N+1)]
     # 확률 미리 넣어두기 (0, +1, -1)
     prob = [[C, (A+B+C)], [A, (A+B+C)], [B, (A+B+C)]]
     
