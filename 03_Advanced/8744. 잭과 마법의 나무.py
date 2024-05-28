@@ -35,58 +35,101 @@
 출력값 설명
 테스트 케이스마다 각 줄에 마법의 나무를 심고 적어도 며칠이 지나야 마법의 나무의 키가 정확히 N이 되는지 출력합니다.
 '''
-
 # -*- coding: utf-8 -*-
 import sys
-
 input = sys.stdin.readline
+from collections import deque
 
-class TreeNode:
-    def __init__(self, height, day):
-        self.height = height
-        self.day = day
-        self.children = []
-
-def bfs_to_reach_height(N):
-    from collections import deque
-
-    root = TreeNode(1, 0)
-    queue = deque([root])
-
-    visited = {1}
-
-    while queue:
-        node = queue.popleft()
-        current_height = node.height
-        current_day = node.day
-
-        if current_height == N:
-            return current_day
-
-        sunny_height = current_height + current_height
-        cloudy_height = max(1, current_height - 1)
-        stormy_height = (current_height + current_height) // 2
-
-        for new_height in [sunny_height, cloudy_height, stormy_height]:
-            if new_height not in visited:
-                visited.add(new_height)
-                new_node = TreeNode(new_height, current_day + 1)
-                node.children.append(new_node)
-                queue.append(new_node)
-
-def main():
-    T = int(input().strip())
-    results = []
-
-    for _ in range(T):
-        N = int(input().strip())
-        results.append(bfs_to_reach_height(N))
-
-    for result in results:
-        print(result)
+# 날짜와 날씨, 일기
+def grown(p1, p2, w):
+    if w == 'sunny':
+        return p1+p2
+    elif w == 'cloudy':
+        if p1 == 1: return 1
+        else: return p1-1
+    elif w == 'rainy':
+        return (p1+p2)//2
 
 if __name__ == "__main__":
-    main()
+    T = int(input())
+    for _ in range(T):
+        N = int(input())
+        weather = ['sunny', 'cloudy', 'rainy']
+        visited = [[False]*(N*3) for _ in range((N*3))]
+
+        Q = deque()
+        # 1일, 현재 키, 전날 키
+        Q.append((1, 2, 1))
+        while Q:
+            d, n, p = Q.popleft()
+            # 목표성장치라면 break
+            if n == N:
+                print(d)
+                break
+            # 성장률 체크할 범위 넘어가도 넘김
+            if n >= N*3: continue
+            # 지난 성장 기록이 계산 한적 있으면 넘김
+            if visited[n][p]: continue
+            # 계산기록 남기기
+            visited[n][p] = True
+            d += 1 # 날짜가 바뀐다
+            # 날씨별로 연산
+            for w in weather:
+                Q.append((d, grown(n,p,w), n))
+        
+################################################################
+
+# # -*- coding: utf-8 -*-
+# import sys
+
+# input = sys.stdin.readline
+
+# class TreeNode:
+#     def __init__(self, height, day):
+#         self.height = height
+#         self.day = day
+#         self.children = []
+
+# def bfs_to_reach_height(N):
+#     from collections import deque
+
+#     root = TreeNode(1, 0)
+#     queue = deque([root])
+
+#     visited = {1}
+
+#     while queue:
+#         node = queue.popleft()
+#         current_height = node.height
+#         current_day = node.day
+
+#         if current_height == N:
+#             return current_day
+
+#         sunny_height = current_height + current_height
+#         cloudy_height = max(1, current_height - 1)
+#         stormy_height = (current_height + current_height) // 2
+
+#         for new_height in [sunny_height, cloudy_height, stormy_height]:
+#             if new_height not in visited:
+#                 visited.add(new_height)
+#                 new_node = TreeNode(new_height, current_day + 1)
+#                 node.children.append(new_node)
+#                 queue.append(new_node)
+
+# def main():
+#     T = int(input().strip())
+#     results = []
+
+#     for _ in range(T):
+#         N = int(input().strip())
+#         results.append(bfs_to_reach_height(N))
+
+#     for result in results:
+#         print(result)
+
+# if __name__ == "__main__":
+#     main()
 
 
 
