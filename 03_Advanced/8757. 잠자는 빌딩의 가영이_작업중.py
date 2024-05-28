@@ -49,11 +49,20 @@ N은 아파트의 높이를 의미하고, K는 가영이가 어느 층에서 시
 예제 출력2
 19992/390625 46668/390625 74256/390625 86514/390625 14856/78125 46927/390625 21648/390625 278/15625
 2678/78125
+
+테스트 케이스 6
+5 5 1 1 1 2
+
+테스트 케이스 7
+8 3 1 3 2 4
+
 '''
 # -*- coding: utf-8 -*-
 import sys
 input = sys.stdin.readline
 # 6,7 번 Failed
+# "Traceback (most recent call last):\r\n  File \"/codereet/e6a7d4e0-3ab9-4c31-b3a9-db8b49a992a4.py\", line 60, in <module>\r\n    ans = red_frac(answer[i])\r\n  File \"/codereet/e6a7d4e0-3ab9-4c31-b3a9-db8b49a992a4.py\", line 28, in red_frac\r\n    return [p[0]//k, p[1]//k]\r\nZeroDivisionError: integer division or modulo by zero\r\n"
+# "11/48 13/54 107/648 13/162 1/36 1/162 1/1296 Traceback (most recent call last):\r\n  File \"/codereet/e6a7d4e0-3ab9-4c31-b3a9-db8b49a992a4.py\", line 60, in <module>\r\n    ans = red_frac(answer[i])\r\n  File \"/codereet/e6a7d4e0-3ab9-4c31-b3a9-db8b49a992a4.py\", line 28, in red_frac\r\n    return [p[0]//k, p[1]//k]\r\nZeroDivisionError: integer division or modulo by zero\r\n"
 from collections import deque
 import math
 
@@ -111,13 +120,15 @@ if __name__ == "__main__":
     for i in range(1, N+1):
         ans = red_frac(answer[i])
         print(f'{ans[0]}/{ans[1]}', end=' ')
-    # 마지막은 줄바꿈 해줘야함
     # 잠에서 깰 확률도 써주자
     ans = red_frac(answer[0])
-    print('\n'+ f'{ans[0]}/{ans[1]}')
+    print('\n'+f'{ans[0]}/{ans[1]}')
 
+#################################################################
 
-# 용석 코드
+# # 용석 코드
+# 6번 : "0 0 1/9 2/9 2/9\r\n4/9\r\n"
+# 7번 : "11/48 13/54 107/648 13/162 1/36 1/162 1/1296 0\r\n1/4\r\n"
 # # -*- coding: utf-8 -*-
 # import sys
 # from fractions import Fraction
@@ -132,7 +143,6 @@ if __name__ == "__main__":
     
 # prob = [Fraction(0,1)] * (N+1)
 # prob[K] = Fraction(1,1)
-
 
 # for _ in range(X):
 #     pre_prob = prob.copy()
