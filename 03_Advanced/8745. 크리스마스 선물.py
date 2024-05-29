@@ -85,16 +85,16 @@ i번 초콜릿(2 ≤ i ≤ N-1)은 i-1번과 i+1번 초콜릿 사이에 있습�
 출력
 1
 '''
-# -*- coding: utf-8 -*-
-import sys
-input = sys.stdin.readline
+# # -*- coding: utf-8 -*-
+# import sys
+# input = sys.stdin.readline
 
-if __name__ == "__main__":
-    N = int(input())
-    necklace = [tuple(map(int, input().split())) for _ in range(N)]
+# if __name__ == "__main__":
+#     N = int(input())
+#     necklace = [tuple(map(int, input().split())) for _ in range(N)]
     
-    answer = -float('inf')
-    print(answer)
+#     answer = -float('inf')
+#     print(answer)
 
 ############################################################################
 
@@ -235,3 +235,46 @@ if __name__ == "__main__":
 #         now = calculate_sweat(s)
 #         answer = max(answer, now)
 #     print(answer)
+
+# 용석 코드
+import sys
+input = sys.stdin.readline
+
+def max_sweetness(N, chocolates):
+    A = [chocolates[i][0] for i in range(N)]
+    B = [chocolates[i][1] for i in range(N)]
+    
+    # Initialize prefix sum arrays for A and B
+    prefix_A = [0] * (2 * N + 1)
+    prefix_B = [0] * (2 * N + 1)
+    
+    for i in range(1, 2 * N + 1):
+        prefix_A[i] = prefix_A[i-1] + A[(i-1) % N]
+        prefix_B[i] = prefix_B[i-1] + B[(i-1) % N]
+    
+    # Initialize dp array
+    dp = [[0] * (N + 1) for _ in range(2 * N)]
+    
+    for length in range(1, N + 1):
+        for i in range(2 * N - length):
+            j = i + length - 1
+            k = N - length
+            if length == 1:
+                dp[i][length] = A[i % N] + k * B[i % N]
+            else:
+                dp[i][length] = max(dp[i + 1][length - 1] + A[i % N] + k * B[i % N],
+                                    dp[i][length - 1] + A[j % N] + k * B[j % N])
+    
+    # Find the maximum sweetness
+    max_sweet = 0
+    if dp[0][N] < 0:
+        max_sweet = dp[0][N]
+    for i in range(N):
+        max_sweet = max(max_sweet, dp[i][N])
+    
+    return max_sweet
+
+if __name__ == "__main__":
+    N = int(input().strip())
+    chocolates = [tuple(map(int, input().strip().split())) for _ in range(N)]
+    print(max_sweetness(N, chocolates))
