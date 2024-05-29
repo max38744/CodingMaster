@@ -244,14 +244,6 @@ def max_sweetness(N, chocolates):
     A = [chocolates[i][0] for i in range(N)]
     B = [chocolates[i][1] for i in range(N)]
     
-    # Initialize prefix sum arrays for A and B
-    prefix_A = [0] * (2 * N + 1)
-    prefix_B = [0] * (2 * N + 1)
-    
-    for i in range(1, 2 * N + 1):
-        prefix_A[i] = prefix_A[i-1] + A[(i-1) % N]
-        prefix_B[i] = prefix_B[i-1] + B[(i-1) % N]
-    
     # Initialize dp array
     dp = [[0] * (N + 1) for _ in range(2 * N)]
     
